@@ -1,5 +1,7 @@
 from sanction import Client as SClient, transport_headers
 from urllib2 import urlopen, HTTPError
+from sqlshare_client.exceptions import NotFoundException
+from sqlshare_client.exceptions import PermissionDeniedException
 import os
 import json
 DEFAULT_REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
@@ -96,6 +98,11 @@ class OAuth(object):
 
                     return self.request(url, method, input_body, headers,
                                         is_reauth_attempt=True)
+
+        if resp.getcode() == 403:
+            raise PermissionDeniedException()
+        if resp.getcode() == 404:
+            raise NotFoundException()
 
         return body
 

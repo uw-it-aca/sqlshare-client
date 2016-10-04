@@ -17,6 +17,10 @@ class Datasets(object):
         data = self.oauth.request("/v3/db/dataset/all")
         return self._build_dataset_list(data)
 
+    def get(self, owner, name):
+        data = self.oauth.request("/v3/db/dataset/%s/%s" % (owner, name))
+        return Dataset(json.loads(data))
+
     def _build_dataset_list(self, data):
         data = json.loads(data)
         datasets = []
@@ -33,3 +37,16 @@ class Dataset(object):
 
     def __str__(self):
         return "Dataset %s/%s" % (self.owner, self.name)
+
+    def __cmp__(self, other):
+        if self.owner < other.owner:
+            return -1
+        elif self.owner > other.owner:
+            return 1
+
+        if self.name < other.name:
+            return -1
+        if self.name > other.name:
+            return 1
+
+        return 0

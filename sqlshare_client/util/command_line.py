@@ -3,9 +3,12 @@ import re
 import os
 
 
-def get_oauth_values():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--credentials')
+def get_oauth_values(parser=None):
+    if not parser:
+        parser = argparse.ArgumentParser()
+
+    parser.add_argument('--credentials', required=True,
+                        help="Path to file containing oauth credentials")
 
     values = vars(parser.parse_args())
 
