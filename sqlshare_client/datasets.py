@@ -23,6 +23,46 @@ class Datasets(object):
                                                             quote(name)))
         return Dataset(json.loads(data))
 
+    def get_permissions(self, owner, name):
+        uri = "/v3/db/dataset/%s/%s/permissions"
+        data = self.oauth.request(uri % (quote(owner), quote(name)))
+
+        return Permissions(json.loads(data))
+
+    def set_is_public(self, owner, name):
+        uri = "/v3/db/dataset/%s/%s"
+        data = self.oauth.request(uri % (quote(owner), quote(name)),
+                                  method="PATCH",
+                                  body='{"is_public": true }')
+        return data
+
+    def set_is_private(self, owner, name):
+        uri = "/v3/db/dataset/%s/%s"
+        data = self.oauth.request(uri % (quote(owner), quote(name)),
+                                  method="PATCH",
+                                  body='{"is_public": false }')
+        return data
+
+    def remove_sharing(self, owner, name):
+        return self._set_sharing(owner, name, is_shared=False, is_public=False,
+                                 accounts=[])
+
+    def set_sharing(self, owner, name, accounts):
+        return self._set_sharing(owner, name, is_shared=True, is_public=False,
+                                 accounts=accounts)
+
+    def _set_sharing(self, owner, name, is_public, is_shared, accounts):
+        uri = "/v3/db/dataset/%s/%s/permissions"
+
+        permissions = json.dumps({"is_public": is_public,
+                                  "is_shared": is_shared,
+                                  "authlist": accounts})
+
+        data = self.oauth.request(uri % (quote(owner), quote(name)),
+                                  method="PUT",
+                                  body=permissions)
+        return data
+
     def create_from_sql(self, owner, name, sql, description, is_public):
         # Force a true type value to be a boolean
         if is_public:
@@ -48,6 +88,15 @@ class Datasets(object):
             datasets.append(Dataset(value))
 
         return datasets
+
+
+class Permissions(object):
+    def __init__(self, data={}):
+        for key in data:
+            if key == "accounts":
+                setattr(self, key, map(lambda x: x["login"], data[key]))
+            else:
+                setattr(self, key, data[key])
 
 
 class Dataset(object):
