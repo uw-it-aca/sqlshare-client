@@ -23,3 +23,6 @@ class Client(object):
 
     def get_all_datasets(self):
         return Datasets(self.oauth).all()
+
+    def get_dataset(self, owner, name):
+        return Datasets(self.oauth).get(owner, name)
