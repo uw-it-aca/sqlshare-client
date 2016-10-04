@@ -21,6 +21,7 @@ setup(
                 'sqlshare_client/scripts/sqlshare_my_datasets',
                 'sqlshare_client/scripts/sqlshare_shared_datasets',
                 'sqlshare_client/scripts/sqlshare_whoami',
+                'sqlshare_client/scripts/sqlshare_permissions',
                 'sqlshare_client/scripts/sqlshare_create_from_sql'],
     description='A library for accessing SQLShare REST Services',
     long_description=README,

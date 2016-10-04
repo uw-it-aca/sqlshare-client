@@ -28,6 +28,21 @@ class Client(object):
     def get_dataset(self, owner, name):
         return Datasets(self.oauth).get(owner, name)
 
+    def get_permissions(self, owner, name):
+        return Datasets(self.oauth).get_permissions(owner, name)
+
+    def set_is_public(self, owner, name):
+        return Datasets(self.oauth).set_is_public(owner, name)
+
+    def set_is_private(self, owner, name):
+        return Datasets(self.oauth).set_is_private(owner, name)
+
+    def remove_sharing(self, owner, name):
+        return Datasets(self.oauth).remove_sharing(owner, name)
+
+    def set_shared(self, owner, name, accounts):
+        return Datasets(self.oauth).set_sharing(owner, name, accounts)
+
     def get_current_user(self):
         return Users(self.oauth).get_current_user()
 
