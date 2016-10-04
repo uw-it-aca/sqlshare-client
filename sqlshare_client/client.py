@@ -1,5 +1,6 @@
 from sqlshare_client.oauth import OAuth
 from sqlshare_client.datasets import Datasets
+from sqlshare_client.users import Users
 
 
 class Client(object):
@@ -26,3 +27,12 @@ class Client(object):
 
     def get_dataset(self, owner, name):
         return Datasets(self.oauth).get(owner, name)
+
+    def get_current_user(self):
+        return Users(self.oauth).get_current_user()
+
+    def create_dataset_from_sql(self, owner, name, sql,
+                                description, is_public):
+        return Datasets(self.oauth).create_from_sql(owner, name, sql,
+                                                    description,
+                                                    is_public)
