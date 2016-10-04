@@ -16,7 +16,12 @@ setup(
         'sanction',
     ],
     license='Apache License, Version 2.0',  # example license
-    scripts = [ 'sqlshare_client/scripts/show_dataset', 'sqlshare_client/scripts/sqlshare_all_datasets', 'sqlshare_client/scripts/sqlshare_my_datasets', 'sqlshare_client/scripts/sqlshare_shared_datasets'],
+    scripts = [ 'sqlshare_client/scripts/sqlshare_show_dataset',
+                'sqlshare_client/scripts/sqlshare_all_datasets',
+                'sqlshare_client/scripts/sqlshare_my_datasets',
+                'sqlshare_client/scripts/sqlshare_shared_datasets',
+                'sqlshare_client/scripts/sqlshare_whoami',
+                'sqlshare_client/scripts/sqlshare_create_from_sql'],
     description='A library for accessing SQLShare REST Services',
     long_description=README,
     url='http://docs.sqlshare.apiary.io/',

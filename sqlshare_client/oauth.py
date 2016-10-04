@@ -63,11 +63,11 @@ class OAuth(object):
         self.refresh_token = refresh_token
         self._write_config(existing)
 
-    def request(self, url, method="GET", input_body=None, headers={},
+    def request(self, url, method="GET", body=None, headers={},
                 is_reauth_attempt=False):
         client = self.client
         req = client.token_transport('{0}{1}'.format(self.server, url),
-                                     self.access_token, data=input_body,
+                                     self.access_token, data=body,
                                      method=method,
                                      headers=headers)
 
@@ -76,9 +76,9 @@ class OAuth(object):
         except HTTPError as e:
             resp = e
 
-        body = resp.read()
+        read_body = resp.read()
         if resp.getcode() == 403:
-            if body.find("SQLShare: Access Denied") < 0:
+            if read_body.find("SQLShare: Access Denied") < 0:
                 # Without the SQLShare error, assume an oauth issue.
                 if not is_reauth_attempt:
                     c = self.client
@@ -96,7 +96,7 @@ class OAuth(object):
 
                     self._write_config(new_data)
 
-                    return self.request(url, method, input_body, headers,
+                    return self.request(url, method, body, headers,
                                         is_reauth_attempt=True)
 
         if resp.getcode() == 403:
@@ -104,7 +104,7 @@ class OAuth(object):
         if resp.getcode() == 404:
             raise NotFoundException()
 
-        return body
+        return read_body
 
     def _get_path(self):
         return os.path.expanduser("~/.sqlshare-rest.cfg")

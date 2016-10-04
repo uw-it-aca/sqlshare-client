@@ -21,6 +21,5 @@ except PermissionDeniedException:
 except NotFoundException:
     print "Dataset not found"
 except Exception as ex:
-    print ex
     pass
 

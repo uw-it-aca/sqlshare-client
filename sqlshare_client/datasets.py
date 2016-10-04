@@ -1,4 +1,5 @@
 import json
+from urllib import quote
 
 
 class Datasets(object):
@@ -18,7 +19,26 @@ class Datasets(object):
         return self._build_dataset_list(data)
 
     def get(self, owner, name):
-        data = self.oauth.request("/v3/db/dataset/%s/%s" % (owner, name))
+        data = self.oauth.request("/v3/db/dataset/%s/%s" % (quote(owner),
+                                                            quote(name)))
+        return Dataset(json.loads(data))
+
+    def create_from_sql(self, owner, name, sql, description, is_public):
+        # Force a true type value to be a boolean
+        if is_public:
+            is_public = True
+        else:
+            is_public = False
+        ds_data = {
+            "sql_code": sql,
+            "is_public": is_public,
+            "description": description,
+        }
+        data = self.oauth.request("/v3/db/dataset/%s/%s" % (quote(owner),
+                                                            quote(name)),
+                                  method="PUT",
+                                  body=json.dumps(ds_data))
+
         return Dataset(json.loads(data))
 
     def _build_dataset_list(self, data):
