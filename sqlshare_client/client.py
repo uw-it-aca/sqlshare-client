@@ -58,3 +58,10 @@ class Client(object):
         return Datasets(self.oauth).create_from_sql(owner, name, sql,
                                                     description,
                                                     is_public)
+
+    def create_dataset_from_file(self, owner, name, file_path,
+                                 description, is_public, visualize=False):
+        return Datasets(self.oauth).create_from_file(owner, name, file_path,
+                                                    description,
+                                                    is_public,
+                                                    visualize)

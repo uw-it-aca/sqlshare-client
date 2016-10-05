@@ -92,3 +92,7 @@ ENV/
 /include/
 /local/
 /pip-selfcheck.json
+
+# Vim
+*.swp
+*.swo

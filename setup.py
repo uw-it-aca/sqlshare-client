@@ -15,6 +15,7 @@ setup(
         'setuptools',
         'sanction',
         'tabulate',
+        'tqdm',
     ],
     license='Apache License, Version 2.0',  # example license
     scripts = [ 'sqlshare_client/scripts/sqlshare_show_dataset',
@@ -25,6 +26,7 @@ setup(
                 'sqlshare_client/scripts/sqlshare_run_query',
                 'sqlshare_client/scripts/sqlshare_list_queries',
                 'sqlshare_client/scripts/sqlshare_permissions',
+                'sqlshare_client/scripts/sqlshare_upload_file',
                 'sqlshare_client/scripts/sqlshare_create_from_sql'],
     description='A library for accessing SQLShare REST Services',
     long_description=README,
