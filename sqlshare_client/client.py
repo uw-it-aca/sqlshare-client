@@ -1,6 +1,7 @@
 from sqlshare_client.oauth import OAuth
 from sqlshare_client.datasets import Datasets
 from sqlshare_client.users import Users
+from sqlshare_client.query import Query
 
 
 class Client(object):
@@ -42,6 +43,9 @@ class Client(object):
 
     def set_shared(self, owner, name, accounts):
         return Datasets(self.oauth).set_sharing(owner, name, accounts)
+
+    def run_query(self, sql):
+        return Query(self.oauth).run_query(sql)
 
     def get_current_user(self):
         return Users(self.oauth).get_current_user()

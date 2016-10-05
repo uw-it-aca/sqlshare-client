@@ -1,5 +1,6 @@
 from sqlshare_client import Client
 from sqlshare_client.util.command_line import get_oauth_values
+from tabulate import tabulate
 import sys
 
 
@@ -25,3 +26,11 @@ def dump_dataset(dataset):
     for key in sorted(dir(dataset)):
         if not key.startswith('__'):
             print "%s: %s" % (key, getattr(dataset, key))
+
+
+def display_query(query):
+    if query.error:
+        print "Error running query: %s" % (query.error)
+        return
+
+    print tabulate(query.sample_data, headers=query.columns)
