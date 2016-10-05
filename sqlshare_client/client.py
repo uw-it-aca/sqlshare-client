@@ -62,6 +62,6 @@ class Client(object):
     def create_dataset_from_file(self, owner, name, file_path,
                                  description, is_public, visualize=False):
         return Datasets(self.oauth).create_from_file(owner, name, file_path,
-                                                    description,
-                                                    is_public,
-                                                    visualize)
+                                                     description,
+                                                     is_public,
+                                                     visualize)

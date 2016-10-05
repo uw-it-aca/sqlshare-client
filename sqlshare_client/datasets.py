@@ -129,7 +129,6 @@ class Datasets(object):
 
             sample = handle.read(CHUNK_SIZE)
 
-
         # Finalize the upload and poll...
         data = json.dumps({"dataset_name": name,
                            "description": description,
@@ -138,7 +137,7 @@ class Datasets(object):
         finalize_url = "/v3/db/file/%s/finalize" % upload_id
 
         response = self.oauth.request(finalize_url,
-                                      method="POST", body = data)
+                                      method="POST", body=data)
 
         data = json.loads(response)
         rows_total = data["rows_total"]
