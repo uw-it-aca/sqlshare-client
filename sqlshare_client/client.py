@@ -47,6 +47,9 @@ class Client(object):
     def run_query(self, sql):
         return Query(self.oauth).run_query(sql)
 
+    def get_all_queries(self):
+        return Query(self.oauth).get_all()
+
     def get_current_user(self):
         return Users(self.oauth).get_current_user()
 

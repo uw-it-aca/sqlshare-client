@@ -2,6 +2,9 @@ from sqlshare_client import Client
 from sqlshare_client.util.command_line import get_oauth_values
 from tabulate import tabulate
 import sys
+import re
+
+MAX_QUERY_DISPLAY = 80
 
 
 def get_client(parser=None):
@@ -34,3 +37,27 @@ def display_query(query):
         return
 
     print tabulate(query.sample_data, headers=query.columns)
+
+
+def display_query_list(query_list):
+    data = []
+    headers = ["ID", "Date Started", "Date Finished", "Status", "SQL"]
+
+    for query in query_list:
+        qid = re.match('.*?([\d]+$)', query.url).groups()[0]
+        sql = query.sql_code
+        if sql is None:
+            sql = ""
+
+        sql = sql.replace("\n", "\\n")
+        if len(sql) > MAX_QUERY_DISPLAY:
+            sql = sql[:MAX_QUERY_DISPLAY]
+            sql += "..."
+        data.append([qid,
+                     query.date_created,
+                     query.date_finished,
+                     query.sample_data_status,
+                     sql
+                     ])
+
+    print tabulate(data, headers=headers)

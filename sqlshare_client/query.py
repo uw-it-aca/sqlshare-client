@@ -7,6 +7,14 @@ class Query(object):
     def __init__(self, oauth):
         self.oauth = oauth
 
+    def get_all(self):
+        data = self.oauth.request("/v3/db/query")
+        queries = json.loads(data)
+        results = []
+        for q in queries:
+            results.append(QueryInstance(q))
+        return results
+
     def run_query(self, sql):
         q = self.launch_query(sql)
 
