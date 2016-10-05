@@ -1,5 +1,6 @@
 import json
 from urllib import quote
+from sqlshare_client.base import BaseObject
 
 
 class Datasets(object):
@@ -99,11 +100,7 @@ class Permissions(object):
                 setattr(self, key, data[key])
 
 
-class Dataset(object):
-    def __init__(self, data={}):
-        for key in data:
-            setattr(self, key, data[key])
-
+class Dataset(BaseObject):
     def __str__(self):
         return "Dataset %s/%s" % (self.owner, self.name)
 
