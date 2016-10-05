@@ -61,3 +61,12 @@ def display_query_list(query_list):
                      ])
 
     print tabulate(data, headers=headers)
+
+
+def print_to_file(handle, query):
+    handle.write(",".join(query.columns))
+    handle.write("\n")
+
+    for row in query.sample_data:
+        handle.write(",".join(map(lambda x: "%s" % x, row)))
+        handle.write("\n")
