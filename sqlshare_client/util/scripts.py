@@ -29,6 +29,7 @@ def get_client(parser=None):
 
     return client
 
+
 def list_datasets(datasets):
     for ds in sorted(datasets):
         print "%s/%s - %s" % (ds.owner, ds.name, ds.url)

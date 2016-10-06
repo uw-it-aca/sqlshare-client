@@ -22,6 +22,7 @@ setup(
         'tabulate',
         'tqdm',
     ],
+    data_files=[('.', ['VERSION'])]
     license='Apache License, Version 2.0',  # example license
     scripts = [ 'sqlshare_client/scripts/sqlshare_show_dataset',
                 'sqlshare_client/scripts/sqlshare_all_datasets',
