@@ -12,6 +12,7 @@ print "VERSION: '%s'" % VERSION
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+url = "https://github.com/uw-it-aca/sqlshare-client/wiki/Client-documentation"
 setup(
     name='sqlshare_client',
     version=VERSION,
@@ -38,7 +39,7 @@ setup(
              'sqlshare_client/scripts/sqlshare_create_from_sql'],
     description='A library for accessing SQLShare REST Services',
     long_description=README,
-    url='http://docs.sqlshare.apiary.io/',
+    url=url,
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
