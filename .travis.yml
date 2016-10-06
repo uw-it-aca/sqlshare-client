@@ -1,9 +1,22 @@
 sudo: false
 language: python
 python:
-  - "2.7"
-  - "3.4"
+- '2.7'
+- '3.4'
 before_script:
-  - pip install pep8
+- pip install pep8
+- echo $TRAVIS_TAG > sqlshare_client/VERSION
 script:
-  - pep8 sqlshare_client/
+- pep8 sqlshare_client/
+before_deploy:
+    find sqlshare_client/ -name \*.pyc -exec rm {} \;
+deploy:
+  provider: pypi
+  server: https://testpypi.python.org/pypi
+  user: uw-it-axdd
+  skip_cleanup: true
+  password:
+    secure: UODzOTPJwf6sUzqFTPA2eHC5j489kfdZYV7ZMrmMHH+4tU17Z9tIt8WLzmPMHh6uSXFgZ5MUgMU7hWpmR46nQwRSpwi2MDWHUT2Y2MU3hlpiIWwR8uLQiVDXS9Kt+CmmXItoQNe+cACXlO2L9KugsohZ84oviBDIOu/7FG2ySPiNxSkuEVcKohIz47ihHQHItfUgZTM0rsOGhKO21NZ9+6CCYXnEOaeKfhR4SxmWImM6s/bynj40AwCp8Z6/RkRKb1R09/+E5NBaRAmub5JFB1PrXQKRL65yjQuJcXzdQX+hZrjCsU2C5pBIwptn7YtFxXZ2ZdFT0T1lFoX7oP4oS0DzdEuLcO3Bc+yzK+keo4iZj8F6YVjKUc4x5qKbZN3ZV1vnbm5/nBYAKQkuKrbbYZhgpWJafZmwswpgA3I9gqqDmNIGb93Usb9Koqu2gUUgWVuFpDfXK2y3pzzO9zVasO2FEeCUmczCYt36RhCUKmEHdL+EduphIgJ0IpUgZSSv9BMtACn9WhSpQSaO5fQ+kVasM2Nz4etCMIdR28h+waZE+Gq1hbRRRCeWo2IGBALuoYxOorxgD7ZnLhKk8/Gnq4hZvC4OrVkvmDsrbw3p27bO1yNHXkhfMJEtAnbR1JRO3CjLwrGUd0P4RDO7NVbmKxV8cs6Zm9s675S9QpPOrn8=
+  on:
+    tags: true
+    condition: $TRAVIS_PYTHON_VERSION = "2.7"

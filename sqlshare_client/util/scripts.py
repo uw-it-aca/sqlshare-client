@@ -14,11 +14,20 @@ def get_client(parser=None):
         print "Error: You need to specify a credentials path."
         raise Exception("Unconfigured")
 
-    return Client(oauth_id=data['id'],
-                  oauth_secret=data['secret'],
-                  server=data['server'],
-                  redirect_uri=data['redirect_uri'])
+    client = Client(oauth_id=data['id'],
+                    oauth_secret=data['secret'],
+                    server=data['server'],
+                    redirect_uri=data['redirect_uri'])
 
+    if not client.has_access():
+        print "You need to give this application access to your data."
+        print "Visit the URL below to continue, and then enter the code below."
+        print client.get_authorize_url()
+
+        code = sys.stdin.readline()[:-1]
+        client.get_tokens_for_code(code=code)
+
+    return client
 
 def list_datasets(datasets):
     for ds in sorted(datasets):
