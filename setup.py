@@ -14,7 +14,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 url = "https://github.com/uw-it-aca/sqlshare-client/wiki/Client-documentation"
 setup(
-    name='sqlshare_client',
+    name='SQLShare-client',
     version=VERSION,
     packages=['sqlshare_client'],
     author="UW-IT AXDD",
