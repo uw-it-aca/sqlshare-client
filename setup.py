@@ -4,7 +4,8 @@ from setuptools import setup
 README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 
 # The VERSION file is created by travis-ci, based on the tag name
-VERSION = open(os.path.join(os.path.dirname(__file__), 'VERSION')).read()
+version_path = 'sqlshare_client/VERSION'
+VERSION = open(os.path.join(os.path.dirname(__file__), version_path)).read()
 VERSION = VERSION.replace("\n", "")
 
 print "VERSION: '%s'" % VERSION

@@ -6,6 +6,7 @@ python:
 before_script:
 - pip install pep8
 - echo $TRAVIS_TAG > sqlshare_client/VERSION
+- cat sqlshare_client/VERSION
 script:
 - pep8 setup.py sqlshare_client/
 before_deploy:
