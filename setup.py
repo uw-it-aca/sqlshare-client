@@ -16,6 +16,8 @@ setup(
     name='sqlshare_client',
     version=VERSION,
     packages=['sqlshare_client'],
+    author="UW-IT AXDD",
+    author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
         'setuptools',
