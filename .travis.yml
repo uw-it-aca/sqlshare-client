@@ -5,7 +5,6 @@ python:
 - '3.4'
 before_script:
 - pip install pep8
-- cat sqlshare_client/VERSION
 script:
 - pep8 setup.py sqlshare_client/
 before_deploy:
