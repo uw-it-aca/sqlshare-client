@@ -5,19 +5,19 @@ python:
 - '3.4'
 before_script:
 - pip install pep8
-- echo $TRAVIS_TAG > sqlshare_client/VERSION
 - cat sqlshare_client/VERSION
 script:
 - pep8 setup.py sqlshare_client/
 before_deploy:
-    find sqlshare_client/ -name \*.pyc -exec rm {} \;
+- find sqlshare_client/ -name \*.pyc -exec rm {} \;
+- echo $TRAVIS_TAG > sqlshare_client/VERSION
 deploy:
   provider: pypi
   server: https://testpypi.python.org/pypi
-  user: uw-it-axdd
+  user: uw-it-aca
   skip_cleanup: true
   password:
-    secure: UODzOTPJwf6sUzqFTPA2eHC5j489kfdZYV7ZMrmMHH+4tU17Z9tIt8WLzmPMHh6uSXFgZ5MUgMU7hWpmR46nQwRSpwi2MDWHUT2Y2MU3hlpiIWwR8uLQiVDXS9Kt+CmmXItoQNe+cACXlO2L9KugsohZ84oviBDIOu/7FG2ySPiNxSkuEVcKohIz47ihHQHItfUgZTM0rsOGhKO21NZ9+6CCYXnEOaeKfhR4SxmWImM6s/bynj40AwCp8Z6/RkRKb1R09/+E5NBaRAmub5JFB1PrXQKRL65yjQuJcXzdQX+hZrjCsU2C5pBIwptn7YtFxXZ2ZdFT0T1lFoX7oP4oS0DzdEuLcO3Bc+yzK+keo4iZj8F6YVjKUc4x5qKbZN3ZV1vnbm5/nBYAKQkuKrbbYZhgpWJafZmwswpgA3I9gqqDmNIGb93Usb9Koqu2gUUgWVuFpDfXK2y3pzzO9zVasO2FEeCUmczCYt36RhCUKmEHdL+EduphIgJ0IpUgZSSv9BMtACn9WhSpQSaO5fQ+kVasM2Nz4etCMIdR28h+waZE+Gq1hbRRRCeWo2IGBALuoYxOorxgD7ZnLhKk8/Gnq4hZvC4OrVkvmDsrbw3p27bO1yNHXkhfMJEtAnbR1JRO3CjLwrGUd0P4RDO7NVbmKxV8cs6Zm9s675S9QpPOrn8=
+    secure: CKtl5xtaVjwvIItVVmiFbIrWCER6KIh5PP/n4Gu4qa9oysuqTdOkdMdYe88Iq49LNC/sLr+Fr8ONtfqfpJh9I2BJJqVBaike2ChQhmK0UhTfTpyAjVDdCwocvlC0YVihWWZ6YPZKBJ3nkCVC1/HCmlP3ryWLbHtSm4obkOqWDWVG3uwy0Qk7U/EHzce5qrf+8SRjD4Nwjw4QnKkzec5DXmVfcw0xnR9Ey06IF0ZhtZ1hLctQklubkN5r7Ky++Duz9963ca+sieYJQVIwWPetoev4lukkTs56rfJJEJLmnjsjiiBT52264uwGJN2lICFaGpTKBVmL367TP4UZHgwVpgo+KhlmT6/p1JVPZVpGCRr19kYECdw+H+3E9PIQk6HFa1Q5xT8AqOGVwzQkdv0qMnF1CSJ7axCmfy59IgJ0tnu7s3eQonQuSP4P4BSaImHVCFiGwx/pcDA3H7D6Wzitiy6Wr4TNU3/GFOj5pXJehPciHYIt9X+8UN0i3GS88paf88gIt4mFGOybTLcTaA91jQR9NAQB80CyqY/tfuYpLk1DLULKnmJWh7C0mSLrTUn0yX40Lp3NazAPQlxC0giq0J0EG7+luyxow5KRIloynEWz7Ornu2C+NbBLLEavPIFyK5c+76mHhvQqtnT48h9nCpD+IDU2XvZSwSjkFuZR6q4=
   on:
     tags: true
     condition: $TRAVIS_PYTHON_VERSION = "2.7"
