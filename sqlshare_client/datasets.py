@@ -1,6 +1,12 @@
 import json
+import time
+import os
+from tqdm import tqdm
 from urllib import quote
 from sqlshare_client.base import BaseObject
+
+CHUNK_SIZE = 1000000
+UPLOAD_PERCENT = 30
 
 
 class Datasets(object):
@@ -81,6 +87,91 @@ class Datasets(object):
                                   body=json.dumps(ds_data))
 
         return Dataset(json.loads(data))
+
+    def create_from_file(self, owner, name, file_path, description, is_public,
+                         visualize=False):
+        if is_public:
+            is_public = True
+        else:
+            is_public = False
+
+        file_size = os.path.getsize(file_path)
+        total_sent = 0
+        handle = open(file_path)
+        sample = handle.read(CHUNK_SIZE)
+        last_percentage = 0
+
+        upload_id = self.oauth.request("/v3/db/file/", method="POST",
+                                       body=sample)
+
+        total_sent += len(sample)
+
+        # XXX - There should be options for changing the parser
+        response = self.oauth.request("/v3/db/file/%s/parser" % upload_id)
+
+        if visualize:
+            pbar = tqdm(total=100)
+
+        sample = handle.read(CHUNK_SIZE)
+        while sample:
+            self.oauth.request("/v3/db/file/%s" % upload_id, method="POST",
+                               body=sample)
+
+            total_sent += len(sample)
+
+            percent_sent = float(total_sent) / float(file_size)
+            current_percent = UPLOAD_PERCENT * percent_sent
+            if visualize:
+                diff = current_percent - last_percentage
+                if diff > 0:
+                    pbar.update(diff)
+            last_percentage = current_percent
+
+            sample = handle.read(CHUNK_SIZE)
+
+        # Finalize the upload and poll...
+        data = json.dumps({"dataset_name": name,
+                           "description": description,
+                           "is_public": is_public})
+
+        finalize_url = "/v3/db/file/%s/finalize" % upload_id
+
+        response = self.oauth.request(finalize_url,
+                                      method="POST", body=data)
+
+        data = json.loads(response)
+        rows_total = data["rows_total"]
+        rows_loaded = data["rows_loaded"]
+
+        current_percent = float(rows_loaded) / float(rows_total)
+        current_percent = (UPLOAD_PERCENT +
+                           (100 - UPLOAD_PERCENT)*current_percent)
+
+        if visualize:
+            pbar.update(current_percent - last_percentage)
+        last_percentage = current_percent
+
+        while current_percent != 100:
+            response = self.oauth.request(finalize_url)
+            try:
+                data = json.loads(response)
+                rows_total = data["rows_total"]
+                rows_loaded = data["rows_loaded"]
+                current_percent = float(rows_loaded) / float(rows_total)
+
+                current_percent = (UPLOAD_PERCENT +
+                                   (100 - UPLOAD_PERCENT)*current_percent)
+
+                if current_percent - last_percentage > 0:
+                    if visualize:
+                        pbar.update(current_percent - last_percentage)
+                last_percentage = current_percent
+
+            except Exception as ex:
+                print "Error uploading file: %s" % response
+            time.sleep(.5)
+        if visualize:
+            pbar.close()
 
     def _build_dataset_list(self, data):
         data = json.loads(data)

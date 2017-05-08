@@ -5,6 +5,7 @@ from sqlshare_client.util.scripts import get_client
 try:
     user = get_client().get_current_user()
     print user.username
-except:
+except Exception as ex:
+    print "E: ", ex
     pass
 
