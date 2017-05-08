@@ -41,7 +41,7 @@ class OAuth(object):
             return True
 
         if "client-credentials" == self.grant_type:
-            self.client.request_token(grant_type = 'client_credentials')
+            self.client.request_token(grant_type='client_credentials')
             self.access_token = self.client.access_token
             existing = self._read_config()
 
@@ -100,7 +100,7 @@ class OAuth(object):
                     new_data = self._load_config()
                     if "client-credentials" == self.grant_type:
                         self.client.access_token = None
-                        c.request_token(grant_type = 'client_credentials')
+                        c.request_token(grant_type='client_credentials')
                         self.access_token = c.access_token
                     else:
                         refresh = self.refresh_token
