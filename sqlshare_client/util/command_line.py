@@ -26,8 +26,10 @@ def get_oauth_values(parser=None):
                 if re.match('^#', line):
                     continue
 
-                key, value = re.match('(.*?)\s*:\s*(.*)\n*', line).groups()
-                data[key] = value
+                matches = re.match('(.*?)\s*:\s*(.*)\n*', line)
+                if matches:
+                    key, value = matches.groups()
+                    data[key] = value
     except IOError:
         url = ("https://github.com/uw-it-aca/sqlshare-client/"
                "wiki/Command-Line-Tools")

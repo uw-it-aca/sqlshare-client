@@ -5,8 +5,10 @@ from sqlshare_client.query import Query
 
 
 class Client(object):
-    def __init__(self, oauth_id, oauth_secret, server=None, redirect_uri=None):
-        self.oauth = OAuth(oauth_id, oauth_secret, server, redirect_uri)
+    def __init__(self, oauth_id, oauth_secret, server=None, redirect_uri=None,
+                 grant_type=None):
+        self.oauth = OAuth(oauth_id, oauth_secret, server, redirect_uri,
+                           grant_type)
 
     def has_access(self):
         return self.oauth.has_access()

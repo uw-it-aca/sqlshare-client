@@ -17,7 +17,8 @@ def get_client(parser=None):
     client = Client(oauth_id=data['id'],
                     oauth_secret=data['secret'],
                     server=data['server'],
-                    redirect_uri=data['redirect_uri'])
+                    redirect_uri=data['redirect_uri'],
+                    grant_type=data.get('grant_type', None))
 
     if not client.has_access():
         print "You need to give this application access to your data."

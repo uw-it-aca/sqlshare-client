@@ -9,7 +9,9 @@ DEFAULT_SQLSHARE_SERVER = 'https://rest.sqlshare.uw.edu'
 
 
 class OAuth(object):
-    def __init__(self, oauth_id, oauth_secret, server=None, redirect_uri=None):
+    def __init__(self, oauth_id, oauth_secret, server=None, redirect_uri=None,
+                 grant_type=None):
+
         self.oauth_id = oauth_id
         self.oauth_secret = oauth_secret
         if server is None:
@@ -30,12 +32,25 @@ class OAuth(object):
         self.client = client
         self.access_token = None
         self.refresh_token = None
+        self.grant_type = grant_type
 
         self._load_config()
 
     def has_access(self):
         if self.access_token:
             return True
+
+        if "client-credentials" == self.grant_type:
+            self.client.request_token(grant_type = 'client_credentials')
+            self.access_token = self.client.access_token
+            existing = self._read_config()
+
+            existing[self.server] = {"access": self.client.access_token,
+                                     }
+            self._write_config(existing)
+
+            return True
+
         return False
 
     def get_authorize_url(self):
@@ -82,18 +97,23 @@ class OAuth(object):
                 # Without the SQLShare error, assume an oauth issue.
                 if not is_reauth_attempt:
                     c = self.client
-                    refresh = self.refresh_token
-
-                    c.request_token(grant_type='refresh_token',
-                                    refresh_token=refresh)
-
                     new_data = self._load_config()
-                    self.refresh_token = c.refresh_token
-                    self.access_token = c.access_token
+                    if "client-credentials" == self.grant_type:
+                        self.client.access_token = None
+                        c.request_token(grant_type = 'client_credentials')
+                        self.access_token = c.access_token
+                    else:
+                        refresh = self.refresh_token
+
+                        c.request_token(grant_type='refresh_token',
+                                        refresh_token=refresh)
+
+                        self.refresh_token = c.refresh_token
+                        self.access_token = c.access_token
+
+                        new_data[self.server]["refresh"] = self.refresh_token
 
                     new_data[self.server]["access"] = self.access_token
-                    new_data[self.server]["refresh"] = self.refresh_token
-
                     self._write_config(new_data)
 
                     return self.request(url, method, body, headers,
@@ -139,5 +159,6 @@ class OAuth(object):
         data = self._read_config()
         if self.server in data:
             self.access_token = data[self.server]["access"]
-            self.refresh_token = data[self.server]["refresh"]
+            if 'refresh' in data[self.server]:
+                self.refresh_token = data[self.server]["refresh"]
         return data
